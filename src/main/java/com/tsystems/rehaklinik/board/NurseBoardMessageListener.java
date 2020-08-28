@@ -7,17 +7,16 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
-import javax.ejb.Stateless;
 import javax.faces.push.Push;
 import javax.faces.push.PushContext;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import java.util.List;
 
-
-@Stateless
+@Named
 @MessageDriven(name = "nurse-board-listener", activationConfig = {
         @ActivationConfigProperty(propertyName = "destinationLookup",
                 propertyValue = "java:jboss/exported/todayTreatmentEventsQueue"),
@@ -35,18 +34,23 @@ public class NurseBoardMessageListener implements MessageListener {
     private TreatmentEventsRepository treatmentEventsRepository;
 
     @Inject
-    @Push
-    private PushContext incoming;
+    @Push(channel = "push")
+    private PushContext push;
 
     @Override
     public void onMessage(Message message) {
         try {
-            logger.info("NURSE BOARD: {}", message.getBody(String.class));
+            logger.info("NURSE BOARD: NurseBoardMessageListener --> {}", message.getBody(String.class));
             List<TreatmentEvent> treatmentEventList = restClient.getTodayTreatmentEvents();
             treatmentEventsRepository.setTreatmentEventList(treatmentEventList);
-//            incoming.send("new­message");
+            logger.info("NURSE BOARD: NurseBoardMessageListener -->: repository updated");
+            push.send("pushed");
         } catch (JMSException e) {
             e.printStackTrace();
         }
+    }
+
+    public void update() {
+        logger.info("NURSE BOARD: NurseBoardMessageListener --> Ajax");
     }
 }

@@ -11,33 +11,68 @@
     <title>Nurse Board</title>
 </h:head>
 <h:body>
-    <h1>NEW: Today Treatment Events</h1>
+    <h1>Today:</h1>
 
-    <h:dataTable value="#{treatmentEventsRepository.treatmentEventList}" var="tEvent">
+    <h:dataTable value="#{treatmentEventsRepository.treatmentEventList}" var="tEvent" id="treatment">
+
         <h:column>
             <f:facet name="header">Time</f:facet>
             #{tEvent.treatmentEventTime}
         </h:column>
-
         <h:column>
             <f:facet name="header">Date</f:facet>
             #{tEvent.treatmentEventDate}
         </h:column>
-
-        <h:column>
-            <f:facet name="header">Patient</f:facet>
-            #{tEvent.patient}
-        </h:column>
-
-        <h:column>
-            <f:facet name="header">Status</f:facet>
-            #{tEvent.treatmentEventStatus}
-        </h:column>
-
         <h:column>
             <f:facet name="header">Treatment</f:facet>
             #{tEvent.medicineProcedureName}
         </h:column>
+        <h:column>
+            <f:facet name="header">Type</f:facet>
+            #{tEvent.treatmentType}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Dose</f:facet>
+            #{tEvent.dose}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Method</f:facet>
+            #{tEvent.administeringMedicationMethod}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Status</f:facet>
+            #{tEvent.treatmentEventStatus}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Cancel Reason</f:facet>
+            #{tEvent.cancelReason}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Patient</f:facet>
+            #{tEvent.patient}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Department</f:facet>
+            #{tEvent.hospitalDepartment}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Ward</f:facet>
+            #{tEvent.hospitalWard}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Start Period</f:facet>
+            #{tEvent.treatmentPeriodStartDate}
+        </h:column>
+        <h:column>
+            <f:facet name="header">End Period</f:facet>
+            #{tEvent.treatmentPeriodEndDate}
+        </h:column>
     </h:dataTable>
+
+    <h:form>
+        <f:websocket channel="push">
+            <f:ajax event="pushed" render=":treatment"/>
+        </f:websocket>
+    </h:form>
 </h:body>
 </html>
