@@ -6,11 +6,17 @@
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://java.sun.com/jstl/core">
 <h:head>
     <title>Nurse Board</title>
 </h:head>
 <h:body>
+    <!--    <c:choose>-->
+    <!--        <c:when test="#{empty treatmentEventsRepository.treatmentEventList}">-->
+    <!--            <h2>Could not connect to remote server. Try again later.</h2>-->
+    <!--        </c:when>-->
+    <!--        <c:otherwise>-->
     <h1>Today:</h1>
 
     <h:dataTable value="#{treatmentEventsRepository.treatmentEventList}" var="tEvent" id="treatment">
@@ -59,16 +65,9 @@
             <f:facet name="header">Ward</f:facet>
             #{tEvent.hospitalWard}
         </h:column>
-        <h:column>
-            <f:facet name="header">Start Period</f:facet>
-            #{tEvent.treatmentPeriodStartDate}
-        </h:column>
-        <h:column>
-            <f:facet name="header">End Period</f:facet>
-            #{tEvent.treatmentPeriodEndDate}
-        </h:column>
     </h:dataTable>
-
+    <!--        </c:otherwise>-->
+    <!--    </c:choose>-->
     <h:form>
         <f:websocket channel="push">
             <f:ajax event="pushed" render=":treatment"/>
