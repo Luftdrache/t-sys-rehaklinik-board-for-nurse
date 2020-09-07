@@ -7,67 +7,91 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:c="http://java.sun.com/jstl/core">
 <h:head>
+    <h:link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+            integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+            crossorigin="anonymous"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css"/>
+    <link href="resources/css/page_style.css" rel="stylesheet"/>
+
+
     <title>Nurse Board</title>
 </h:head>
-<h:body>
-    <!--    <c:choose>-->
-    <!--        <c:when test="#{empty treatmentEventsRepository.treatmentEventList}">-->
-    <!--            <h2>Could not connect to remote server. Try again later.</h2>-->
-    <!--        </c:when>-->
-    <!--        <c:otherwise>-->
-    <h1>Today:</h1>
-
-    <h:dataTable value="#{treatmentEventsRepository.treatmentEventList}" var="tEvent" id="treatment">
-
-        <h:column>
+<h:body style="background: #A4D349">
+    <div style="margin-left: 20px">
+        <h1>Schedule for Today:</h1>
+    </div>
+    <p:dataTable value="#{treatmentEventsRepository.treatmentEventList}" var="tEvent" id="treatment"
+                 class="table-style"
+                 rows="10"
+                 paginator="true"
+                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                 rowsPerPageTemplate="5,10,15"
+                 rowStyleClass="#{tEvent.treatmentEventStatus eq 'OVERDUE' ? 'overdue-status' :
+                 tEvent.treatmentEventStatus eq 'CANCELLED' ? 'cancelled-status':
+                 tEvent.treatmentEventStatus eq 'COMPLETED' ? 'completed-status': null}"
+                 resizableColumns="true"
+                 tableStyleClass=".ui-paginator"
+                 tableStyle="table-layout: auto;">
+        <tbody>
+        <p:column styleClass="centeredColumnContent" sortBy="#{tEvent.treatmentEventTime}">
             <f:facet name="header">Time</f:facet>
             #{tEvent.treatmentEventTime}
-        </h:column>
-        <h:column>
+        </p:column>
+        <p:column styleClass="centeredColumnContent" sortBy="#{tEvent.treatmentEventDate}">
             <f:facet name="header">Date</f:facet>
             #{tEvent.treatmentEventDate}
-        </h:column>
-        <h:column>
+        </p:column>
+        <p:column styleClass="centeredColumnContent" sortBy="#{tEvent.medicineProcedureName}">
             <f:facet name="header">Treatment</f:facet>
             #{tEvent.medicineProcedureName}
-        </h:column>
-        <h:column>
+        </p:column>
+        <p:column styleClass="centeredColumnContent" sortBy="#{tEvent.treatmentType}">
             <f:facet name="header">Type</f:facet>
             #{tEvent.treatmentType}
-        </h:column>
-        <h:column>
+        </p:column>
+        <p:column styleClass="centeredColumnContent" sortBy="#{tEvent.dose}">
             <f:facet name="header">Dose</f:facet>
             #{tEvent.dose}
-        </h:column>
-        <h:column>
+        </p:column>
+        <p:column styleClass="centeredColumnContent" sortBy="#{tEvent.administeringMedicationMethod}">
             <f:facet name="header">Method</f:facet>
             #{tEvent.administeringMedicationMethod}
-        </h:column>
-        <h:column>
+        </p:column>
+        <p:column styleClass="centeredColumnContent" sortBy="#{tEvent.treatmentEventStatus}">
             <f:facet name="header">Status</f:facet>
             #{tEvent.treatmentEventStatus}
-        </h:column>
-        <h:column>
+        </p:column>
+        <p:column styleClass="centeredColumnContent" sortBy="#{tEvent.cancelReason}">
             <f:facet name="header">Cancel Reason</f:facet>
             #{tEvent.cancelReason}
-        </h:column>
-        <h:column>
+        </p:column>
+        <p:column styleClass="centeredColumnContent" sortBy="#{tEvent.patient}">
             <f:facet name="header">Patient</f:facet>
             #{tEvent.patient}
-        </h:column>
-        <h:column>
+        </p:column>
+        <p:column styleClass="centeredColumnContent" sortBy="#{tEvent.hospitalDepartment}">
             <f:facet name="header">Department</f:facet>
             #{tEvent.hospitalDepartment}
-        </h:column>
-        <h:column>
+        </p:column>
+        <p:column styleClass="centeredColumnContent" sortBy="#{tEvent.hospitalWard}">
             <f:facet name="header">Ward</f:facet>
             #{tEvent.hospitalWard}
-        </h:column>
-    </h:dataTable>
-    <!--        </c:otherwise>-->
-    <!--    </c:choose>-->
+        </p:column>
+        </tbody>
+        <tfoot>
+        <f:facet name="footer">
+            <c:if test="#{empty treatmentEventsRepository.treatmentEventList}">
+                <h3>Could not connect to remote server. Try again later.</h3>
+            </c:if>
+        </f:facet>
+        </tfoot>
+    </p:dataTable>
     <h:form>
         <f:websocket channel="push">
             <f:ajax event="pushed" render=":treatment"/>

@@ -1,0 +1,41 @@
+.table-style {
+    background: #d6eeff;
+    margin-bottom: 10px;
+    font-size: 14px;
+    width: 100%;
+    padding: 3% 3% 3% 3%;
+    height: auto;
+    min-height: 90vh;
+    alignment: center;
+}
+
+.overdue-status {
+    background-color: #fca752 !important;
+    background-image: none !important;
+    color: #000000 !important;
+}
+
+.cancelled-status {
+    background-color: #d90000 !important;
+    background-image: none !important;
+    color: #000000 !important;
+}
+
+.completed-status {
+    background-color: #A4D349 !important;
+    background-image: none !important;
+    color: #000000 !important;
+}
+
+.ui-paginator, th {
+    background-color: #e6f2ff !important;
+    background-image: none !important;
+}
+
+td.centeredColumnContent {
+    text-align: center;
+}
+
+.ui-datatable-footer {
+    background: red !important;
+}
